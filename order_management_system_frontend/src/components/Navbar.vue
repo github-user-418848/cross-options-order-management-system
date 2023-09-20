@@ -98,14 +98,20 @@ export default {
     },
     methods: {
         initializeTheme() {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                this.toggle = true;
-                this.setTheme();
+            const userPreference = localStorage.getItem('darkMode');
+            if (userPreference === null) {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    this.toggle = true;
+                }
+            } else {
+                this.toggle = userPreference === 'enabled';
             }
+            this.setTheme();
         },
         toggleTheme() {
             this.toggle = !this.toggle;
             this.setTheme();
+            localStorage.setItem('darkMode', this.toggle ? 'enabled' : 'disabled');
         },
         setTheme() {
             if (this.toggle) {
