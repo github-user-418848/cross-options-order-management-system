@@ -39,7 +39,7 @@ To set up and run the Order Management System, follow these installation steps:
 - Clone the repository:
 
 ```
-git clone <repository-url>
+git clone https://github.com/github-user-418848/cross-options-order-management-system.git
 cd order-management-system
 ```
 
@@ -72,14 +72,14 @@ To run the Order Management System, follow these steps:
 - Start the backend server:
 
 ```
-cd backend
+cd order_management_system_backend
 python manage.py runserver
 ```
 
 - Start the frontend:
 
 ```
-cd frontend
+cd order_management_system_frontend
 npm run dev
 ```
 
@@ -160,19 +160,19 @@ The frontend of the Order Management System is built using Vue.js, a popular Jav
 
 The frontend of the system is organized into Vue components, each responsible for specific user interface elements.
 
-#### 5.1.1. `Login`
+#### 5.1.1. Login
 
 This provides the login functionality for users. It includes fields for entering the username and password and a login button.
 
 ![Login](screenshots/Login.png)
 
-#### 5.1.2. `Registration`
+#### 5.1.2. Registration
 
 This form is for user registration. It includes form fields for user details such as name, age, email, username, and password. It also integrates with reCAPTCHA for security.
 
 ![Registration](screenshots/Registration.png)
 
-#### 5.1.3. `Trades`
+#### 5.1.3. Trades
 
 This includes its own trade details such as the date of execution, symbol of shares, buy/sell status, amount of shares bought, and price per share.
 
@@ -182,7 +182,7 @@ This includes its own trade details such as the date of execution, symbol of sha
 ![Trades](screenshots/UserTrades.png)<br>
 *Authenticated as a user.*
 
-#### 5.1.4. `Adding Trades`
+#### 5.1.4. Adding Trades
 
 This allows users to add new trade details. Admin or users can input trade information, including the symbol of shares, date of execution, amount of shares bought, and price per share.
 
@@ -192,20 +192,20 @@ This allows users to add new trade details. Admin or users can input trade infor
 ![AddTrade](screenshots/UserAddTrade.png)<br>
 *Authenticated as a user.*
 
-#### 5.1.5 `Updating Trade`
+#### 5.1.5 Updating Trade
 
 This is used for updating trade details. It retrieves trade information from the backend and allows users to modify the amount of shares bought and the price per share. This functionality is only allowed for Administrator
 
 ![UpdateTrade](screenshots/AdminUpdateTrade.png)
 
-#### 5.1.6. `Users`
+#### 5.1.6. Users
 
 This component displays a list of all users in the system. Administrators can only view user details for now.
 
 ![AdminUsers](screenshots/AdminUsers.png)
 
 
-#### 5.1.7. `MyAccount`
+#### 5.1.7. My Account
 This provides user account information and allows users to view and edit their profile details. It displays user-specific data such as name, email, and age.
 
 ![MyAccount](screenshots/AdminMyAccount.png)<br>
@@ -214,7 +214,7 @@ This provides user account information and allows users to view and edit their p
 ![MyAccount](screenshots/UserMyAccount.png)<br>
 *Authenticated as a user.*
 
-#### 5.1.9. `ChangePassword`
+#### 5.1.9. Change Password
 
 This allows users to change their passwords. Users must provide their current password and enter a new one.
 
@@ -224,7 +224,7 @@ This allows users to change their passwords. Users must provide their current pa
 ![ChangePassword](screenshots/UserChangePassword.png)<br>
 *Authenticated as a user.*
 
-#### 5.1.10. `Dropdown Menu`
+#### 5.1.10. Dropdown Menu
 
 This provides a dropdown menu for user actions. Admin or users can access options like changing their password and logging out from this menu.
 
@@ -244,7 +244,7 @@ The frontend is built using Vue.js 3, the latest version of the framework.
 
 The frontend communicates with the backend using RESTful API calls.
 
-`Axios Configuration`
+#### Axios Configuration
 
 To ensure seamless communication with the backend, an Axios instance named apiClient is created with a base URL pointing to the backend API server. Additionally, an interceptor is added to include an ```Authorization``` header with the user's token for authenticated requests.
 
@@ -270,7 +270,7 @@ apiClient.interceptors.request.use(config => {
 });
 ```
 
-`Authentication`
+#### Authentication
 
 The following functions handle user authentication:
 
@@ -295,7 +295,8 @@ export const logout = async () => {
   return apiClient.post('/logout/')
 };
 ```
-`Trade Operations`
+
+#### Trade Operations
 
 Trades can be created, retrieved, updated, and deleted using the following functions:
 
@@ -353,7 +354,8 @@ export const updateTrade = async (tradeData, id) => {
   return apiClient.put(`/trades/${id}/update/`, tradeData);
 }
 ```
-`User Operations`
+
+#### User Operations
 
 User-related functions allow for managing users and fetching user profiles:
 
