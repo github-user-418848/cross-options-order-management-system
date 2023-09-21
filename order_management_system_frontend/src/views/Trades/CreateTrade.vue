@@ -1,5 +1,9 @@
 <template>
     <div id="create-trade">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="alertMessage">
+            {{ alertMessage }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div class="container-fluid">
             <div class="card p-3">
                 <div class="card-body">
@@ -68,6 +72,7 @@ export default {
             response: '',
             errorMessage: {},
             token: this.$store.state.token,
+            alertMessage: '',
         };
     },
     methods: {
@@ -90,7 +95,10 @@ export default {
                     quantity: this.formData.quantity,
                     price_per_share: this.formData.pricePerShare,
                 });
-                this.$router.push('/trades');
+                this.alertMessage = 'Trade has been created successfully. Redirecting you back to the trades page.';
+                setTimeout(() => {
+                    this.$router.push('/trades');
+                }, 3000);
             }
             catch (error) {
                 this.errorMessage = error.response.data;

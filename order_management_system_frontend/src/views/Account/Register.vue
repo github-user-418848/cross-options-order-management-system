@@ -1,6 +1,11 @@
 <template>
     <div id="registration" class="mx-auto">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" v-if="alertMessage">
+            {{ alertMessage }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
         <div class="card">
+            <span v-if="successMessage" class="text-success">{{ successMessage }}</span>
             <div class="card-body">
                 <h1 class="display-6">Registration</h1>
                 <hr>
@@ -55,7 +60,8 @@
                     <input type="submit" class="btn btn-primary d-block" name="submit" value="Register" />
                 </form>
                 <hr>
-                <p class="small text-center">Already have an account? <router-link class="text-decoration-none text-secondary" to="/login">Login here</router-link></p>
+                <p class="small text-center">Already have an account? <router-link
+                        class="text-decoration-none text-secondary" to="/login">Login here</router-link></p>
             </div>
         </div>
     </div>
@@ -78,6 +84,8 @@ export default {
             age: ref(null),
             password: ref(''),
             errorMessage: ref(''),
+            successMessage: ref(''),
+            alertMessage: ref('')
         };
     },
     mounted() {
@@ -119,7 +127,10 @@ export default {
                     age: this.age,
                     'g-recaptcha-response': recaptchaResponse
                 });
-                this.$router.push('/login');
+                this.alertMessage = 'Registration successful! Redirecting you back to login page';
+                setTimeout(() => {
+                    this.$router.push('/login');
+                }, 3000);
             } catch (error) {
                 this.errorMessage = error.response.data;
             }
