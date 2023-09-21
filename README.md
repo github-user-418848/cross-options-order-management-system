@@ -55,14 +55,14 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 Install backend dependencies:
 
 ```
-cd backend
+cd order_management_system_backend
 pip install -r requirements.txt
 ```
 
 Install frontend dependencies:
 
 ```
-cd frontend
+cd order_management_system_frontend
 npm install
 ```
 ## 3. Usage
