@@ -33,9 +33,10 @@ class TradeViewSet(viewsets.ModelViewSet):
 
         if user.is_staff or user.is_superuser:
             queryset = Trade.objects.all().order_by('id')
+
             user_qry = self.request.query_params.get('user')
             if user_qry:
-                queryset = queryset.filter(user__id=user.id).order_by('id')
+                queryset = queryset.filter(user=user_qry).order_by('id')
 
         start_date_str = self.request.query_params.get('start_date')
         end_date_str = self.request.query_params.get('end_date')
