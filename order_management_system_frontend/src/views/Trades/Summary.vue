@@ -8,39 +8,86 @@
         <p class="text-secondary small">View a summary of trades and apply filters to narrow down the results.</p>
         <div class="container-fluid">
             <template v-if="loggedIn">
-                <div v-if="currentPage === 1" class="row justify-content-md-start px-0 justify-content-center">
-                    <div class="col-md-3">
-                        <div class="form-floating mb-3">
-                            <select v-model="symbol" class="form-select" id="symbol" @change="applyFilters">
-                                <option v-for="(choice, value) in SYMBOL_CHOICES" :key="value" :value="value">{{ choice }}
-                                </option>
-                            </select>
-                            <label for="symbol">Symbol</label>
+                <template v-if="isAdmin">
+                    <div v-if="currentPage === 1" class="row justify-content-md-start px-0 justify-content-center">
+                        <div class="col-lg-2">
+                            <div class="form-floating mb-3">
+                                <select v-model="user" class="form-select" id="user" @change="applyFilters">
+                                    <option value="">All Users</option>
+                                    <option v-for="userOption in userOptions" :key="userOption.id" :value="userOption.id">{{
+                                        userOption.username }}</option>
+                                </select>
+                                <label for="user">User</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-floating mb-3">
+                                <select v-model="symbol" class="form-select" id="symbol" @change="applyFilters">
+                                    <option v-for="(choice, value) in SYMBOL_CHOICES" :key="value" :value="value">{{ choice }}
+                                    </option>
+                                </select>
+                                <label for="symbol">Symbol</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-floating mb-3">
+                                <select v-model="buyOrSell" class="form-select" id="buyOrSell" @change="applyFilters">
+                                    <option v-for="(choice, value) in BUY_SELL_CHOICES" :key="value" :value="value">{{ choice }}
+                                    </option>
+                                </select>
+                                <label for="buyOrSell">Buy / Sell</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" type="date" id="startDate" v-model="startDate"
+                                    @change="applyFilters" />
+                                <label for="startDate">Start Date</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" type="date" id="endDate" v-model="endDate" @change="applyFilters" />
+                                <label for="endDate">End Date</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-floating mb-3">
-                            <select v-model="buyOrSell" class="form-select" id="buyOrSell" @change="applyFilters">
-                                <option v-for="(choice, value) in BUY_SELL_CHOICES" :key="value" :value="value">{{ choice }}
-                                </option>
-                            </select>
-                            <label for="buyOrSell">Buy / Sell</label>
+                </template>
+                <template v-else>
+                    <div v-if="currentPage === 1" class="row justify-content-md-start px-0 justify-content-center">
+                        <div class="col-lg-3">
+                            <div class="form-floating mb-3">
+                                <select v-model="symbol" class="form-select" id="symbol" @change="applyFilters">
+                                    <option v-for="(choice, value) in SYMBOL_CHOICES" :key="value" :value="value">{{ choice }}
+                                    </option>
+                                </select>
+                                <label for="symbol">Symbol</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-floating mb-3">
+                                <select v-model="buyOrSell" class="form-select" id="buyOrSell" @change="applyFilters">
+                                    <option v-for="(choice, value) in BUY_SELL_CHOICES" :key="value" :value="value">{{ choice }}
+                                    </option>
+                                </select>
+                                <label for="buyOrSell">Buy / Sell</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" type="date" id="startDate" v-model="startDate"
+                                    @change="applyFilters" />
+                                <label for="startDate">Start Date</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" type="date" id="endDate" v-model="endDate" @change="applyFilters" />
+                                <label for="endDate">End Date</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="form-floating mb-3">
-                            <input class="form-control" type="date" id="startDate" v-model="startDate"
-                                @change="applyFilters" />
-                            <label for="startDate">Start Date</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-floating mb-3">
-                            <input class="form-control" type="date" id="endDate" v-model="endDate" @change="applyFilters" />
-                            <label for="endDate">End Date</label>
-                        </div>
-                    </div>
-                </div>
+                </template>
                 <template v-if="trades !== null && trades.count != 0">
                     <DynamicTable :caption="tableCaptionWithPage" :headers="tableHeaders" :items="trades.results" />
                     <nav aria-label="Page navigation" v-if="totalPages > 1">
@@ -68,7 +115,8 @@
   
 <script>
 import { ref } from 'vue';
-import { getTrades } from '../../services/api.js';
+import { useStore } from 'vuex';
+import { getTrades, getUsers } from '../../services/api.js';
 import DynamicTable from '../../components/DynamicTable.vue';
 
 export default {
@@ -98,20 +146,27 @@ export default {
             token: this.$store.state.token,
             currentPage: 1,
             totalPages: 1,
+            user: '',
             startDate: currentDate,
             endDate: currentDate,
             symbol: '',
             buyOrSell: '',
+            userOptions: [],
         };
     },
     async mounted() {
         if (this.loggedIn) {
+            await this.loadUserOptions();
             this.applyFilters();
         }
     },
     computed: {
         tableCaptionWithPage() {
             return `${this.tableCaption} - Page ${this.currentPage} of ${this.totalPages}`;
+        },
+        isAdmin() {
+            const store = useStore();
+            return (store.state.isSuperUser || store.state.isStaff);
         },
         currentDate() {
             const today = new Date();
@@ -167,13 +222,21 @@ export default {
         },
         async loadTrades() {
             try {
-                this.trades = await getTrades(this.currentPage, this.startDate, this.endDate, this.buyOrSell, this.symbol);
+                this.trades = await getTrades(this.currentPage, this.user, this.startDate, this.endDate, this.buyOrSell, this.symbol);
                 this.trades.results.forEach((trade) => {
                     trade.updateLink = `/trades/${trade.id}/update`; // Add this line
                 });
                 this.totalPages = Math.ceil(this.trades.count / 10);
             } catch (error) {
                 console.error('Error fetching data:', error);
+            }
+        },
+        async loadUserOptions() {
+            try {
+                const usersResponse = await getUsers(1, '', '', '', ''); // Fetch all users, you can adjust the parameters as needed
+                this.userOptions = usersResponse.results;
+            } catch (error) {
+                console.error('Error fetching users:', error);
             }
         },
         goToPage(page) {
