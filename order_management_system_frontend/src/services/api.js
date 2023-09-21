@@ -30,10 +30,11 @@ export const logout = async () => {
   return apiClient.post('/logout/')
 };
 
-export const getTrades = async (page, startDate, endDate, buySell, symbol) => {
+export const getTrades = async (page, user, startDate, endDate, buySell, symbol) => {
   const config = {
     params: {
       page: page,
+      user: user,
       start_date: startDate,
       end_date: endDate,
       buy_sell: buySell,
