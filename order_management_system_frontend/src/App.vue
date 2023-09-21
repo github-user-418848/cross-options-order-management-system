@@ -17,3 +17,8 @@ export default {
   },
 }
 </script>
+<style>
+  .alert {
+    word-wrap: break-word !important;
+  }
+</style>
