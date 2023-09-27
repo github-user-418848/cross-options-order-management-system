@@ -62,6 +62,10 @@ export default {
         async login(e) {
             e.preventDefault();
             this.errorMessage = '';
+            if (typeof grecaptcha === 'undefined' || grecaptcha === null) {
+                this.errorMessage = 'reCAPTCHA script was not loaded.';
+                return;
+            }
             const recaptchaResponse = grecaptcha.getResponse();
             if (!recaptchaResponse) {
                 this.errorMessage = 'reCAPTCHA verification failed';
