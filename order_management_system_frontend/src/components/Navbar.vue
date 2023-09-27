@@ -29,7 +29,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav ms-auto">
-                        <router-link to="/trades" class="text-center nav-link text-light">
+                        <router-link to="/trades" class="text-start text-lg-center nav-link text-light">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                 class="bi bi-graph-up" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"
@@ -37,7 +37,7 @@
                             </svg>
                             Trades
                         </router-link>
-                        <router-link v-if="isAdmin" to="/users" class="text-center nav-link text-light">
+                        <router-link v-if="isAdmin" to="/users" class="text-start text-lg-center nav-link text-light">
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                 class="bi bi-people-fill" viewBox="0 0 16 16">
                                 <path
@@ -46,7 +46,7 @@
                             Users
                         </router-link>
                         <li class="navbar-item dropdown">
-                            <a class="nav-link dropdown-toggle text-center text-light" href="#" role="button"
+                            <a class="nav-link dropdown-toggle text-start text-lg-center text-light" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                                     class="bi bi-person-circle img-fluid me-0" viewBox="0 0 16 16">
@@ -130,3 +130,10 @@ export default {
     }
 }
 </script>
+<style>
+.router-link-active,
+.router-link-exact-active,
+a:hover:not(.btn) {
+    color: var(--bs-secondary) !important;
+}
+</style>
