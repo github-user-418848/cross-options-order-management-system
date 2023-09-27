@@ -28,7 +28,11 @@ class UserLoginAPIView(APIView):
     permission_classes = [AllowAny]
     
     def post(self, request):
-        captcha_response = request.data['g-recaptcha-response']
+        captcha_response = request.data.get('g-recaptcha-response', None)
+        
+        if not captcha_response:
+            return Response({'message': 'Invalid reCAPTCHA'}, status=status.HTTP_400_BAD_REQUEST)
+        
         is_valid_captcha = verify_recaptcha(captcha_response)
 
         if not is_valid_captcha:
@@ -55,9 +59,14 @@ class UserRegistrationAPIView(APIView):
 
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
+        
         if serializer.is_valid():
 
-            captcha_response = request.data['g-recaptcha-response']
+            captcha_response = request.data.get('g-recaptcha-response', None)
+            
+            if not captcha_response:
+                return Response({'message': 'Invalid reCAPTCHA'}, status=status.HTTP_400_BAD_REQUEST)
+            
             is_valid_captcha = verify_recaptcha(captcha_response)
 
             if not is_valid_captcha:
