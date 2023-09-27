@@ -90,16 +90,7 @@
                 </template>
                 <template v-if="trades !== null && trades.count != 0">
                     <DynamicTable :caption="tableCaptionWithPage" :headers="tableHeaders" :items="trades.results" />
-                    <nav aria-label="Page navigation" v-if="totalPages > 1">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                                <button class="page-link" @click="goToPage(currentPage - 1)">Previous</button>
-                            </li>
-                            <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                                <button class="page-link" @click="goToPage(currentPage + 1)">Next</button>
-                            </li>
-                        </ul>
-                    </nav>
+                    <Pagination :currentPage="currentPage" :totalPages="totalPages" @page-change="goToPage" v-if="totalPages > 1" />
                 </template>
                 <template v-else>
                     <p class="d-flex align-items-center justify-content-center vh-100 my-auto border rounded">No data found.
@@ -118,11 +109,13 @@ import { ref } from 'vue';
 import { useStore } from 'vuex';
 import { getTrades, getUsers } from '../../services/api.js';
 import DynamicTable from '../../components/DynamicTable.vue';
+import Pagination from '../../components/Pagination.vue';
 
 export default {
     name: 'Summary',
     components: {
         DynamicTable,
+        Pagination
     },
     data() {
         const currentDate = this.currentDate;
