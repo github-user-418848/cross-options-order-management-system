@@ -141,13 +141,9 @@ class UserViewSet(viewsets.ModelViewSet):
             )
 
 class UserLogoutAPIView(APIView):
-    def post(self, request):
-        try:
-            user_token = Token.objects.get(user=request.user)
-            user_token.delete()
-            return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
-        except Token.DoesNotExist:
-            return Response({'message': 'No token found for the user'}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, *args, **kwargs):
+        request.auth.delete()
+        return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
 
 class UserChangePasswordAPIView(APIView):
     permission_classes = [IsOwnerOrReadOnly]
