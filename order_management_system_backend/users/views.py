@@ -155,7 +155,6 @@ class UserChangePasswordAPIView(APIView):
     def post(self, request):
         serializer = UserChangePasswordSerializer(data=request.data, context={'request': request})
         
-        print(request)
         if serializer.is_valid():
             user = request.user
             current_password = serializer.validated_data['current_password']
